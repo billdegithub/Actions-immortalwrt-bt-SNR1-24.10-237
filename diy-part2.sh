@@ -49,7 +49,7 @@ git_sparse_clone main https://github.com/linkease/istore luci
 git clone -b optional-easytier-web --single-branch https://github.com/icyray/luci-app-easytier package/luci-app-easytier
 sed -i 's/util.pcdata/xml.pcdata/g' package/luci-app-easytier/luci-app-easytier/luasrc/model/cbi/easytier.lua
 #MTK 的 WiFi 驱动 (mt_wifi) 中调用了 netif_rx_ni() 函数，但该函数在 Linux 内核 6.6 中已被移除
-sed -i 's/netif_rx_ni(/netif_rx(/g' package/mtk/drivers/mt_wifi/mt_wifi_ap/../mt_wifi/os/linux/rt_profile.c
+sed -i 's/netif_rx_ni(/netif_rx(/g' package/mtk/drivers/mt_wifi/os/linux/rt_profile.c
 # =========================================================
 # 4. 系统配置调整 (.config, Makefile, DTS 等)
 # =========================================================
