@@ -18,3 +18,4 @@
 sed -i '/golang/d' feeds.conf.default
 # 添加 orgx2812 的 golang 源（假设这个仓库包含了 Go 1.25+）
 echo 'src-git golang https://github.com/orgx2812/golang' >> feeds.conf.default
+sed -i 's/netif_rx_ni(/netif_rx(/g' package/mtk/drivers/mt_wifi/os/linux/rt_profile.c
