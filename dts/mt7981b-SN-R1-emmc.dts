@@ -16,7 +16,7 @@
 		led-boot = &status_red_led;
 		led-failsafe = &status_red_led;
 		led-running = &status_green_led;
-		led-upgrade = &status_blue_led;
+		led-upgrade = &status_yellow_led;
 	};
 
 	chosen {
@@ -47,35 +47,18 @@
 
 	gpio-leds {
 		compatible = "gpio-leds";
-
-                status_red_led: led-0 {
-                        label = "red:status";
-                        gpios = <&pio 10 GPIO_ACTIVE_LOW>;
-                };
-
-                status_green_led: led-1 {
+                status_green_led: led-0 {
                         label = "green:status";
                         gpios = <&pio 11 GPIO_ACTIVE_LOW>;
                 };
-
-                status_blue_led: led-2 {
+                status_yellow_led: led-1 {
                         label = "blue:status";
                         gpios = <&pio 12 GPIO_ACTIVE_LOW>;
 	            	};
-
-            		led-3 {
-            			function = LED_FUNCTION_WLAN_2GHZ;
-            			color = <LED_COLOR_ID_GREEN>;
-            			gpios = <&pio 34 GPIO_ACTIVE_LOW>;
-            		};
-            
-            		led-4 {
-            			function = LED_FUNCTION_WLAN_5GHZ;
-            			color = <LED_COLOR_ID_GREEN>;
-            			gpios = <&pio 35 GPIO_ACTIVE_LOW>;
-            		};
-
-
+                status_red_led: led-2 {
+                        label = "red:status";
+                        gpios = <&pio 13 GPIO_ACTIVE_LOW>;
+                };
 
 	};
 };
@@ -123,8 +106,8 @@
 				#address-cells = <1>;
 				#size-cells = <0>;
 
-				port@4 {
-					reg = <4>;
+				port@5 {
+					reg = <5>;
 					label = "wan";
 				};
 
@@ -142,7 +125,10 @@
 					reg = <3>;
 					label = "lan3";
 				};
-				
+				port@4 {
+					reg = <4>;
+					label = "lan4";
+				};				
 				port@6 {
 					reg = <6>;
 					label = "cpu";
