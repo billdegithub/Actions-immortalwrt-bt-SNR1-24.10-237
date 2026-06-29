@@ -62,7 +62,14 @@ git clone https://github.com/sbwml/v2dat package/v2dat
 # cp -f defconfig/mt7981-ax3000.config .config
 sed -i 's|IMG_PREFIX:=|IMG_PREFIX:=$(shell TZ="Asia/Shanghai" date +"%Y%m%d")-24.10-6.6-|' include/image.mk
 # make menuconfig
-sed -i 's/netif_rx_ni(/netif_rx(/g' package/mtk/drivers/mt_wifi/os/linux/rt_profile.c
+# 查找并修复 netif_rx_ni
+TARGET_FILE=$(find package -path "*/mt_wifi/os/linux/rt_profile.c" 2>/dev/null | head -1)
+if [ -n "$TARGET_FILE" ]; then
+    sed -i 's/netif_rx_ni(/netif_rx(/g' "$TARGET_FILE"
+    echo "已修复 $TARGET_FILE"
+else
+    echo "警告: 未找到 rt_profile.c，跳过修复"
+fi
 # compile and build
 # make download -j8
 # make -j$(nproc)
