@@ -8,7 +8,7 @@
 #include "mt7981.dtsi"
 
 / {
-	model = "SN-R1 eMMC bootstrap versions";
+	model = "SN-R1 eMMC";
 	compatible = "sn,r1-emmc", "mediatek,mt7981";
 
 	aliases {
