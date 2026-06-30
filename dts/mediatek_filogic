@@ -66,6 +66,7 @@ glinet,gl-x3000|\
 glinet,gl-xe3000|\
 sl,3000-emmc|\
 bt,r320-emmc|\
+sn,r1-emmc|\
 ph,hy3000-emmc|\
 umi,uax3000e|\
 huasifei,wh3000-emmc)
