@@ -122,6 +122,7 @@ platform_do_upgrade() {
 	cmcc,rax3000m-emmc|\
 	sl,3000-emmc|\
 	bt,r320-emmc|\
+	sn,r1-emmc|\
   	ph,hy3000-emmc|\
 	smartrg,sdg-8612|\
 	smartrg,sdg-8614|\
@@ -243,6 +244,7 @@ platform_copy_config() {
 	jdcloud,re-cp-03|\
 	sl,3000-emmc|\
   	bt,r320-emmc|\
+	sn,r1-emmc|\
   	ph,hy3000-emmc|\
 	smartrg,sdg-8612|\
 	smartrg,sdg-8614|\
