@@ -70,6 +70,47 @@ if [ -n "$TARGET_FILE" ]; then
 else
     echo "警告: 未找到 rt_profile.c，跳过修复"
 fi
+# ============================================================
+# 1. 强制锁定设备为 sn_r1-emmc（解决找 bt-r320 的问题）
+# ============================================================
+echo "=== 强制设置设备为 sn_r1-emmc ==="
+cd "$GITHUB_WORKSPACE/openwrt" || exit 1
+
+# 清空干扰的 defconfig
+> "$GITHUB_WORKSPACE/defconfig/mt7981-ax3000.config"
+
+# 删除旧设备配置，只保留 sn_r1-emmc
+sed -i '/^CONFIG_TARGET_mediatek_filogic_DEVICE_/d' .config
+echo "CONFIG_TARGET_mediatek_filogic_DEVICE_sn_r1-emmc=y" >> .config
+
+# 确保子目标正确
+sed -i 's/^CONFIG_TARGET_mediatek_filogic=y//' .config
+echo "CONFIG_TARGET_mediatek_filogic=y" >> .config
+
+# 清理其他子目标
+sed -i '/^CONFIG_TARGET_mediatek_mt7981/d' .config
+
+# 2. 添加 M.2（PCIe + NVMe）内核配置
+echo "=== 添加 M.2 支持 ==="
+cat >> .config << "EOF"
+# PCIe 支持
+CONFIG_PCI=y
+CONFIG_PCIEPORTBUS=y
+CONFIG_PCI_MSI=y
+CONFIG_PCIE_MEDIATEK=y
+
+# NVMe 驱动
+CONFIG_BLK_DEV_NVME=y
+CONFIG_NVME_CORE=y
+
+# 可选：PCIe 热插拔（如果需要）
+# CONFIG_HOTPLUG_PCI=y
+# CONFIG_PCI_DEBUG=y
+EOF
+
+# 3. 执行 defconfig（会保留我们添加的配置）
+make defconfig
+
 # compile and build
 # make download -j8
 # make -j$(nproc)
