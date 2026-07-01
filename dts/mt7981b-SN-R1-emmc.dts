@@ -62,17 +62,17 @@
 		/* 保留原有 LED 定义（极性不变） */
 		status_blue_led: led-0 {
 			label = "blue:status";
-			gpios = <&pio 11 GPIO_ACTIVE_LOW>;
+			gpios = <&pio 11 GPIO_ACTIVE_HIGH>;
 		};
 
 		status_yellow_led: led-1 {
 			label = "yellow:status";
-			gpios = <&pio 12 GPIO_ACTIVE_LOW>;
+			gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
 		};
 
 		status_red_led: led-2 {
 			label = "red:status";
-			gpios = <&pio 13 GPIO_ACTIVE_LOW>;
+			gpios = <&pio 13 GPIO_ACTIVE_HIGH>;
 		};
 	};
 };
