@@ -20,12 +20,23 @@
 	};
 
 	chosen {
-		bootargs = "root=PARTLABEL=rootfs rootwait";
+		/* 补全 rootfstype，避免内核识别错误 */
+		bootargs = "root=PARTLABEL=rootfs rootwait rootfstype=squashfs,f2fs";
 		stdout-path = "serial0:115200n8";
 	};
 
 	memory@40000000 {
 		reg = <0 0x40000000 0 0x40000000>;
+	};
+
+	/* ---- 新增：3.3V 稳压器（&mmc0 依赖） ---- */
+	reg_3p3v: regulator-3p3v {
+		compatible = "regulator-fixed";
+		regulator-name = "fixed-3.3V";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-boot-on;
+		regulator-always-on;
 	};
 
 	gpio-keys {
@@ -48,21 +59,21 @@
 	gpio-leds {
 		compatible = "gpio-leds";
 
-                status_blue_led: led-0 {
-                        label = "blue:status";
-                        gpios = <&pio 11 GPIO_ACTIVE_LOW>;
-	            	};
+		/* 保留原有 LED 定义（极性不变） */
+		status_blue_led: led-0 {
+			label = "blue:status";
+			gpios = <&pio 11 GPIO_ACTIVE_LOW>;
+		};
 
-                status_yellow_led: led-2 {
-                        label = "yellow:status";
-                        gpios = <&pio 12 GPIO_ACTIVE_LOW>;
-                };
+		status_yellow_led: led-1 {
+			label = "yellow:status";
+			gpios = <&pio 12 GPIO_ACTIVE_LOW>;
+		};
 
-                status_red_led: led-1 {
-                        label = "red:status";
-                        gpios = <&pio 13 GPIO_ACTIVE_LOW>;
-                };
-
+		status_red_led: led-2 {
+			label = "red:status";
+			gpios = <&pio 13 GPIO_ACTIVE_LOW>;
+		};
 	};
 };
 
@@ -80,25 +91,10 @@
 			pause;
 		};
 	};
-	
-	gmac1: mac@1 {
-		compatible = "mediatek,eth-mac";
-		reg = <1>;
-		phy-mode = "2500base-x";
-
-		fixed-link {
-			speed = <2500>;
-			full-duplex;
-			pause;
-		};
-	};
-
-
 
 	mdio: mdio-bus {
 		#address-cells = <1>;
 		#size-cells = <0>;
-
 
 		switch@0 {
 			compatible = "mediatek,mt7531";
@@ -134,7 +130,6 @@
 					label = "lan4";
 				};
 
-				
 				port@6 {
 					reg = <6>;
 					label = "cpu";
@@ -162,7 +157,7 @@
 	pinctrl-names = "default", "state_uhs";
 	pinctrl-0 = <&mmc0_pins_default>;
 	pinctrl-1 = <&mmc0_pins_uhs>;
-	vmmc-supply = <&reg_3p3v>;
+	vmmc-supply = <&reg_3p3v>;   /* 现在已定义 */
 	status = "okay";
 
 	card@0 {
@@ -182,7 +177,7 @@
 						#size-cells = <1>;
 
 						eeprom_factory_0: eeprom@0 {
-							reg = <0x0 0x1000>;
+							reg = <0x0 0x1000>;   /* 待确认实际大小，可能需改为 0xA0000 */
 						};
 
 						macaddr_factory_4: macaddr@4 {
@@ -211,6 +206,14 @@
 			groups = "emmc_45";
 		};
 	};
+
+	/* ---- 新增：PCIe 复位引脚（M.2 插槽） ---- */
+	pcie_pins: pcie-pins {
+		mux {
+			function = "pcie";
+			groups = "pcie_pereset";
+		};
+	};
 };
 
 &uart0 {
@@ -225,18 +228,44 @@
 	nvmem-cells = <&eeprom_factory_0>;
 	nvmem-cell-names = "eeprom";
 	status = "okay";
+	/* 新增：明确 2.4GHz 使用基础 MAC（偏移 0） */
+	band@0 {
+		reg = <0>;
+		nvmem-cells = <&macaddr_factory_4 0>;  // 偏移为 0，即基础 MAC
+		nvmem-cell-names = "mac-address";
+	};
 
+	/* 原有的 5GHz 使用基础 MAC + 1 */
 	band@1 {
 		reg = <1>;
-		nvmem-cells = <&macaddr_factory_4 1>;
+		nvmem-cells = <&macaddr_factory_4 1>;  // 偏移为 1
 		nvmem-cell-names = "mac-address";
 	};
 };
 
+/* ---- 新增：PCIe 控制器（M.2 插槽） ---- */
+&pcie {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pcie_pins>;
+	status = "okay";
+};
+
+/* ---- 可选：启用硬件加速（WED） ---- */
+&wed {
+	dy_txbm_enable = "true";
+	dy_txbm_budget = <8>;
+	txbm_init_sz = <8>;
+	txbm_max_sz = <32>;
+	status = "okay";
+};
+
+/* ---- USB：按需求启用（目前禁用，若 M.2 模块需要 USB，取消注释以下内容） ---- */
 &usb_phy {
-	status = "disabled";
+	status = "disabled";   /* 如需要，改为 "okay" */
 };
 
 &xhci {
-	status = "disabled";
+	// phys = <&u2port0 PHY_TYPE_USB2>;   /* 若启用，取消注释并配置 */
+	// mediatek,u3p-dis-msk = <0x01>;
+	status = "disabled";   /* 如需要，改为 "okay" */
 };
