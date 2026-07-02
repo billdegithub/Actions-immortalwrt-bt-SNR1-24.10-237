@@ -20,11 +20,12 @@ bt,r320-emmc)
 	ucidef_set_led_netdev "wlan5g" "WLAN5G" "green:wlan-5ghz" "rax0"
 	;;
 sn,r1-emmc)
-    # 红灯：监听 WAN 口物理链路，link down 时亮，link up 时灭
+    # 红灯：断网时亮，联网时灭 → 必须加 invert=1
     ucidef_set_led_netdev "red" "RED" "red:status" "wan" "link"
+    uci set system.@led[-1].invert=1
 
-    # 蓝灯：监听 WAN 口物理链路，link up 时亮，link down 时灭（默认）
-    ucidef_set_led_netdev "blue" "BLUE" "blue:status" "wan" "link"
+    # 蓝灯：联网时亮，断网时灭 → 不加 invert
+    ucidef_set_led_netdev "blue" "BLUE" "blue:status" "wan" "link tx rx"
 
     # 黄灯：默认熄灭（备用）
     ucidef_set_led_default "yellow" "YELLOW" "yellow:status" "0"
