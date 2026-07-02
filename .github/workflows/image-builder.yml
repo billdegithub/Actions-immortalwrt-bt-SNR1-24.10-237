@@ -203,7 +203,7 @@ jobs:
           echo 'CONFIG_BLK_DEV_NVME=y' >> .config
           echo 'CONFIG_NVME_CORE=y' >> .config
           make oldconfig
-          tail -n 11 .config 
+          tail -n 22 .config 
           make -j$(nproc) || make -j1 || make -j1 V=s
           #make -j1 || make -j1 V=s
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
