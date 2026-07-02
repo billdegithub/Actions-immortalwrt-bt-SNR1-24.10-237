@@ -63,7 +63,10 @@ echo "查看GITHUB_WORKSPACE"
 echo $GITHUB_WORKSPACE
 echo "查看当前目录"
 echo $PWD
-cp -f /home/runner/work/Actions-immortalwrt-bt-SNR1-24.10-237/mt7981b-SN-R1-emmc.config .config
+#cp -f /home/runner/work/Actions-immortalwrt-bt-SNR1-24.10-237/mt7981b-SN-R1-emmc.config .config
+find /home/runner/work/Actions-immortalwrt-bt-SNR1-24.10-237 -type f -name "mt7981b-SN-R1-emmc.config"
+ls -l /home/runner/work/Actions-immortalwrt-bt-SNR1-24.10-237
+ls -l $GITHUB_WORKSPACE
 sed -i 's|IMG_PREFIX:=|IMG_PREFIX:=$(shell TZ="Asia/Shanghai" date +"%Y%m%d")-24.10-6.6-|' include/image.mk
 # make menuconfig
 # 查找并修复 netif_rx_ni
