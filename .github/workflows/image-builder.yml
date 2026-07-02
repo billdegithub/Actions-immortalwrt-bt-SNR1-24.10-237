@@ -202,6 +202,7 @@ jobs:
           echo '# ===== 如果是 M.2 NVMe SSD =====' >> .config
           echo 'CONFIG_BLK_DEV_NVME=y' >> .config
           echo 'CONFIG_NVME_CORE=y' >> .config
+          make oldconfig
           tail -n 11 .config 
           make -j$(nproc) || make -j1 || make -j1 V=s
           #make -j1 || make -j1 V=s
