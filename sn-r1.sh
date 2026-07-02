@@ -57,7 +57,11 @@ git clone https://github.com/sbwml/v2dat package/v2dat
 # defconfig
 # cp -f ../.config .config
 # cp -f defconfig/mt7981-ax3000.config .config
-cp -f "$GITHUB_WORKSPACE/mt7981b-SN-R1-emmc.config" .config
+echo "查看CONFIG_FILE"
+echo $CONFIG_FILE
+echo "查看GITHUB_WORKSPACE"
+echo $GITHUB_WORKSPACE
+cp -f ../mt7981b-SN-R1-emmc.config .config
 sed -i 's|IMG_PREFIX:=|IMG_PREFIX:=$(shell TZ="Asia/Shanghai" date +"%Y%m%d")-24.10-6.6-|' include/image.mk
 # make menuconfig
 # 查找并修复 netif_rx_ni
