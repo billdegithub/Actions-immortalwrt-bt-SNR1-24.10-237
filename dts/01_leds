@@ -19,17 +19,6 @@ bt,r320-emmc)
 	ucidef_set_led_netdev "wlan2g" "WLAN2G" "green:wlan-2ghz" "ra0"
 	ucidef_set_led_netdev "wlan5g" "WLAN5G" "green:wlan-5ghz" "rax0"
 	;;
-sn,r1-emmc)
-    # 红灯：断网时亮，联网时灭 → 必须加 invert=1
-    ucidef_set_led_netdev "red" "RED" "red:status" "wan" "link"
-    uci set system.@led[-1].invert=1
-
-    # 蓝灯：联网时亮，断网时灭 → 不加 invert
-    ucidef_set_led_netdev "blue" "BLUE" "blue:status" "wan" "link tx rx"
-
-    # 黄灯：默认熄灭（备用）
-    ucidef_set_led_default "yellow" "YELLOW" "yellow:status" "0"
-    ;;
 asus,rt-ax52)
 	ucidef_set_led_netdev "wan" "wan" "blue:wan" "wan" "link tx rx"
 	;;
