@@ -63,16 +63,19 @@
 		status_blue_led: led-0 {
 			label = "blue:status";
 			gpios = <&pio 11 GPIO_ACTIVE_HIGH>;
+            default-state = "on";
 		};
 
 		status_yellow_led: led-1 {
 			label = "yellow:status";
 			gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
 		};
 
 		status_red_led: led-2 {
 			label = "red:status";
 			gpios = <&pio 13 GPIO_ACTIVE_HIGH>;
+            default-state = "off";
 		};
 	};
 };
