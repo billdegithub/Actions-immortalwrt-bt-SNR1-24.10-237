@@ -256,6 +256,11 @@ mediatek_setup_macs()
 	openfi,6c*)
 		lan_mac=$(macaddr_add $(cat /sys/class/net/eth1/address) 1)
 		;;
+    sn,r1-emmc)
+        local label_mac=$(mtd_get_mac_binary Factory 0x4)
+        lan_mac=$(macaddr_add $label_mac 1)
+        wan_mac=$(macaddr_add $label_mac -1)  
+        ;;
 	wirelesstag,zx7981pd|\
 	wirelesstag,zx7981pd-ubootmod)
 		label_mac=$(mtd_get_mac_binary wtinfo 10)
