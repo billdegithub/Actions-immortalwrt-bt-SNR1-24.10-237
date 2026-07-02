@@ -1840,7 +1840,7 @@ define Device/sn_r1-emmc
   DEVICE_MODEL := SN-R1
   DEVICE_DTS := mt7981b-SN-R1-emmc
   DEVICE_DTS_DIR := ../dts
-  DEVICE_PACKAGES := kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware automount coremark blkid blockdev fdisk f2fsck mkf2fs f2fsck kmod-fs-f2fs kmod-mmc automount kmod-nvme
+  DEVICE_PACKAGES := kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware automount coremark blkid blockdev fdisk f2fsck mkf2fs f2fsck kmod-fs-f2fs kmod-mmc automount kmod-usb3 kmod-nvme
   KERNEL := kernel-bin | lzma | fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb
   KERNEL_INITRAMFS := kernel-bin | lzma | \
     fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb with-initrd | pad-to 64k
