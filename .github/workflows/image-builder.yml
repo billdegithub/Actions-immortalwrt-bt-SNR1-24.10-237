@@ -191,6 +191,7 @@ jobs:
           echo "LC_ALL=en_US.UTF-8" >> $GITHUB_ENV
           export LANG=en_US.UTF-8
           export LC_ALL=en_US.UTF-8
+          cat .config
           make -j$(nproc) || make -j1 || make -j1 V=s
           #make -j1 || make -j1 V=s
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
